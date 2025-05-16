@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LuxeChecker</title>
+
+  <link rel="icon" href="https://www.dropbox.com/scl/fi/6ytzpk5uxn1cev63xjk1h/Luxe.png?rlkey=uovqt90cxixgk2y3ong1kmcm6&st=faap4w6t&dl=1  " type="image/x-icon">
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter :wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0f0f0f;
+      color: #ffffff;
+      line-height: 1.6;
+    }
+
+    header {
+      background: linear-gradient(90deg, #1a1a1a, #222);
+      padding: 2rem;
+      text-align: center;
+      border-bottom: 1px solid #333;
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      color: #00ffcc;
+      animation: glow 2s infinite alternate;
+    }
+
+    @keyframes glow {
+      from { text-shadow: 0 0 10px #00ffcc, 0 0 20px #00ffcc; }
+      to { text-shadow: 0 0 20px #00ffcc, 0 0 30px #00ffcc; }
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      background: #111;
+      padding: 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    nav a {
+      color: #ccc;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    nav a:hover {
+      color: #00ffcc;
+    }
+
+    section {
+      max-width: 1100px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 10px;
+      padding: 1.5rem;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 15px #00ffcc;
+    }
+
+    .card h3 {
+      color: #00ffcc;
+      margin-bottom: 0.5rem;
+    }
+
+    .footer {
+      background: #111;
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.9rem;
+      color: #aaa;
+      border-top: 1px solid #333;
+    }
+
+    .button {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+      background: #00ffcc;
+      color: #000;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background 0.3s ease;
+    }
+
+    .button:hover {
+      background: #00c3a0;
+    }
+
+    pre {
+      background: #111;
+      padding: 1rem;
+      overflow-x: auto;
+      border-radius: 8px;
+      border: 1px solid #333;
+    }
+
+    code {
+      color: #00ffcc;
+    }
+
+    .developer {
+      text-align: center;
+      margin-top: 3rem;
+      font-size: 1rem;
+      color: #ccc;
+    }
+
+    .developer strong {
+      color: #00ffcc;
+    }
+
+    .github-star {
+      margin-top: 1rem;
+      display: block;
+      font-size: 1.2rem;
+    }
+
+    .github-star a {
+      color: #00ffcc;
+      text-decoration: underline;
+    }
+
+    .github-star a:hover {
+      color: #00c3a0;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>LuxeChecker</h1>
+    <p>Мощное приложение для проверки читов, запуска утилит и управления системой</p>
+  </header>
+
+  <nav>
+    <a href="#features">Функции</a>
+    <a href="#tools">Инструменты</a>
+    <a href="#about">О программе</a>
+    <a href="#download">Скачать</a>
+  </nav>
+
+  <section id="features">
+    <h2 style="text-align:center; margin-bottom: 2rem;">🔍 Основные функции</h2>
+    <div class="features-grid">
+      <div class="card">
+        <h3>🧰 Полезные инструменты</h3>
+        <p>Запуск таких утилит как LastActivityView, USBDeview, ShellbagAnalyzer и др.</p>
+      </div>
+      <div class="card">
+        <h3>📁 Работа с папками</h3>
+        <p>Открытие директорий AppData, Temp, Prefetch и просмотр содержимого.</p>
+      </div>
+      <div class="card">
+        <h3>🌐 Открытие сайтов</h3>
+        <p>Быстрый доступ к популярным ресурсам: CheatCSGO.ru, Nixware.cc, Onetap.com и другим.</p>
+      </div>
+      <div class="card">
+        <h3>💻 Информация о системе</h3>
+        <p>Данные о видеокарте, объеме RAM, количестве мониторов и установленных приложениях.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="tools">
+    <h2 style="text-align:center; margin-bottom: 2rem;">⚙️ Дополнительные возможности</h2>
+    <pre><code>
+ - Редактор реестра
+ - История запущенных процессов
+ - Список установленных программ
+ - Поддержка языков: Русский / Английский
+ - Автоматические обновления
+ - Темный интерфейс с анимацией
+    </code></pre>
+  </section>
+
+  <section id="download">
+    <h2 style="text-align:center; margin-bottom: 2rem;">📥 Скачать</h2>
+    <p style="text-align:center;">
+      <a class="button" href="https://github.com/ZerioCommand/LuxeChecker " target="_blank" rel="noopener noreferrer">Скачать последнюю версию</a>
+    </p>
+  </section>
+
+  <footer class="footer">
+    &copy; 2025 ZerioCommand. Все права защищены.
+  </footer>
+
+</body>
+</html>
