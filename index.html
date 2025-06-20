@@ -11,175 +11,416 @@
   <meta property="og:type" content="website">
   <meta name="twitter:title" content="LuxeChecker">
   <meta name="twitter:description" content="Мощное приложение для проверки читов, запуска утилит и управления системой">
-
-  <link rel="icon" href="https://www.dropbox.com/scl/fi/6ytzpk5uxn1cev63xjk1h/Luxe.png?rlkey=uovqt90cxixgk2y3ong1kmcm6&st=faap4w6t&dl=1  " type="image/x-icon">
-
-  <link href="https://fonts.googleapis.com/css2?family=Inter :wght@400;600;700&display=swap" rel="stylesheet">
-
+  <link rel="icon" href="https://www.dropbox.com/scl/fi/6ytzpk5uxn1cev63xjk1h/Luxe.png?rlkey=uovqt90cxixgk2y3ong1kmcm6&st=faap4w6t&dl=1" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
-
     body {
       font-family: 'Inter', sans-serif;
-      background-color: #0f0f0f;
+      background-color: #0f0f0f;      
       color: #ffffff;
       line-height: 1.6;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+      position: relative;
     }
-
-    header {
-      background: linear-gradient(90deg, #1a1a1a, #222);
-      padding: 2rem;
-      text-align: center;
-      border-bottom: 1px solid #333;
+    /* Фоновое видео */
+    .background-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -2;
+      opacity: 0.3;
     }
-
-    header h1 {
-      font-size: 2.5rem;
-      color: #FF47CA;
-      animation: glow 2s infinite alternate;
+    .app-container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+      max-width: 1200px;
+      height: 100vh;
+      max-height: 800px;
+      display: flex;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
     }
-
-    @keyframes glow {
-      from { text-shadow: 0 0 10px #FF47CA, 0 0 20px #FF47CA; }
-      to { text-shadow: 0 0 20px #FF47CA, 0 0 30px #FF47CA; }
+    .left-panel {
+      width: 50%;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-right: 1px solid #333;
     }
-
-    section {
-      max-width: 1100px;
-      margin: 2rem auto;
-      padding: 0 1rem;
-    }
-
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .card {
-      background: #1a1a1a;
-      border: 1px solid #333;
-      border-radius: 10px;
-      padding: 1.5rem;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 0 15px #FF47CA;
-    }
-
-    .card h3 {
-      color: #FF47CA;
-      margin-bottom: 0.5rem;
-    }
-
-    .footer {
-      background: #111;
+    .overlay {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       text-align: center;
       padding: 2rem;
-      font-size: 0.9rem;
-      color: #aaa;
-      border-top: 1px solid #333;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 1s ease-out;
     }
-
-    .button {
-      display: inline-block;
+    .overlay.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .left-panel h1 {
+      font-size: 4rem;
+      background-image: linear-gradient(90deg,
+        #FF69B4,
+        #FF1493,
+        #FF6EB4,
+        #FFB6C1,
+        #FF69B4);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: pinkShine 5s ease-in-out infinite;
+      margin-bottom: 1rem;
+      opacity: 0;
+      transform: scale(0.8);
+      transition: all 1.2s ease-out;
+    }
+    .left-panel h1.active {
+      opacity: 1;
+      transform: scale(1);
+    }
+    @keyframes pinkShine {
+      0% { background-position: 0% center; }
+      50% { background-position: 100% center; }
+      100% { background-position: 0% center; }
+    }
+    .left-panel p {
+      font-size: 1.25rem;
+      color: #ccc;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 1.5s ease-out;
+    }
+    .left-panel p.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .right-panel {
+      width: 50%;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    .slider-container {
+      flex-grow: 1;
+      position: relative;
+      overflow: hidden;
+    }
+    .slides {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+    .slide {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.8s ease-in-out;
+    }
+    .slide.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .slide-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 1rem;
+      box-sizing: border-box;
+      max-width: 90%;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s ease-out;
+    }
+    .slide-inner.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .slide-content {
+      max-width: 95%;
+      font-size: 1.4rem;
+      color: #fff;
+    }
+    pre {
+      background: transparent;
+      border: none;
+      color: #FF47CA;
+      font-size: 1.3rem;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      text-align: left;
       margin-top: 1rem;
-      padding: 0.5rem 1rem;
+    }
+    code {
+      color: #FF47CA;
+      font-family: monospace;
+    }
+    .button-download {
+      margin-top: 2rem;
+      padding: 0.8rem 1.5rem;
       background: #FF47CA;
       color: #000;
       border: none;
-      border-radius: 5px;
+      border-radius: 6px;
       cursor: pointer;
       text-decoration: none;
       font-weight: bold;
+      font-size: 1.1rem;
       transition: background 0.3s ease;
+      display: inline-block;
+      position: relative;
+      overflow: hidden;
     }
-
-    .button:hover {
-      background: #00c3a0;
+    .button-download::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(
+        120deg,
+        rgba(255, 255, 255, 0.0) 0%,
+        rgba(255, 255, 255, 0.3) 40%,
+        rgba(255, 255, 255, 0.0) 80%
+      );
+      transform: rotate(25deg);
+      animation: shine 3s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 2;
     }
-
-    pre {
-      background: #111;
-      padding: 1rem;
-      overflow-x: auto;
-      border-radius: 8px;
-      border: 1px solid #333;
+    @keyframes shine {
+      0% { left: -50%; }
+      50% { left: 100%; }
+      100% { left: 100%; }
     }
-
-    code {
-      color: #FF47CA;
-    }
-
     .developer {
+      margin-top: 1.5rem;
+      font-size: 0.9rem;
+      color: #aaa;
       text-align: center;
-      margin-top: 3rem;
-      font-size: 1rem;
-      color: #ccc;
     }
-
     .developer strong {
       color: #FF47CA;
     }
-
   </style>
 </head>
 <body>
+    <body style="-webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;" oncontextmenu="return false;"></body>
+  <div id="preloader" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; display: flex; align-items: center; justify-content: center; z-index: 9999;">
+    <img src="https://www.dropbox.com/scl/fi/c2co66ci9hrj528m19p41/admil-flashbang.gif?rlkey=4hegetj7qoa6wwmsh9xh1p9pe&st=ltjual2k&dl=1" alt="Загрузка..." style="width: auto; height: 200px;">
+    <audio id="preloadAudio" src="https://www.dropbox.com/scl/fi/ve9lu9gvjuqk8su1k3hmw/cs-go-flashbang.mp3?spm=a2ty_o01.29997173.0.0.3043c921iHUGe1&dl=1" autoplay></audio>
+  </div>
 
-  <header>
-    <h1>LuxeChecker</h1>
-    <p>Мощное приложение для проверки читов, запуска утилит и управления системой</p>
-  </header>
+  <video class="background-video" autoplay loop muted playsinline>
+    <source src="https://dl.dropboxusercontent.com/scl/fi/tmzbe9jdzp2nndb8hc6l6/videoplayback.webm?rlkey=2nf3pkzel2caqlikqriru994o&st=vxj3rxam" type="video/webm">
+    Ваш браузер не поддерживает видео.
+  </video>
 
-  <section id="features">
-    <h2 style="text-align:center; margin-bottom: 2rem;">🔍 Основные функции</h2>
-    <div class="features-grid">
-      <div class="card">
-        <h3>🧰 Полезные инструменты</h3>
-        <p>Запуск таких утилит как LastActivityView, USBDeview, ShellbagAnalyzer и др.</p>
-      </div>
-      <div class="card">
-        <h3>📁 Работа с папками</h3>
-        <p>Открытие директорий AppData, Temp, Prefetch и просмотр содержимого.</p>
-      </div>
-      <div class="card">
-        <h3>🌐 Открытие сайтов</h3>
-        <p>Быстрый доступ к популярным ресурсам: CheatCSGO.ru, Nixware.cc, Onetap.com и другим.</p>
-      </div>
-      <div class="card">
-        <h3>💻 Информация о системе</h3>
-        <p>Данные о видеокарте, объеме RAM, количестве мониторов и установленных приложениях.</p>
+  <div class="app-container">
+    <div class="left-panel">
+      <div class="overlay">
+        <h1>LuxeChecker</h1>
+        <p>Мощное приложение для проверки на читы, запуска утилит и поиск по файлам</p>
       </div>
     </div>
-  </section>
+    <div class="right-panel">
+      <div class="slider-container">
+        <div class="slides" id="slides">
+          <div class="slide">
+            <div class="slide-inner">
+              <div class="slide-content">
+                <h2 style="color: #FF47CA; font-size: 2rem;">🧰 Утилиты</h2>      
+                <p>Запуск таких утилит как LastActivityView, USBDeview, ShellbagAnalyzer и др.</p>
+              </div>
+              <a class="button-download" href="https://github.com/ZerioCommand/LuxeChecker"   target="_blank" rel="noopener noreferrer">Скачать</a>
+              <div class="developer">
+                Разработчик: <strong>ZerioCommand</strong> | © 2025 Все права защищены.
+              </div>
+            </div>
+          </div>
+          <div class="slide">
+            <div class="slide-inner">
+              <div class="slide-content">
+                <h2 style="color: #FF47CA; font-size: 2rem;">📂 Работа с папками</h2>
+                <p>Открытие директорий AppData, Temp, Prefetch и просмотр содержимого.</p>
+              </div>
+              <a class="button-download" href="https://github.com/ZerioCommand/LuxeChecker"   target="_blank" rel="noopener noreferrer">Скачать</a>
+              <div class="developer">
+                Разработчик: <strong>ZerioCommand</strong> | © 2025 Все права защищены.
+              </div>
+            </div>
+          </div>
+          <div class="slide">
+            <div class="slide-inner">
+              <div class="slide-content">
+                <h2 style="color: #FF47CA; font-size: 2rem;">🌎︎ Открытие сайтов</h2>
+                <p>Быстрый доступ к популярным ресурсам: CheatCSGO.ru, Nixware.cc, Onetap.com и другим.</p>
+              </div>
+              <a class="button-download" href="https://github.com/ZerioCommand/LuxeChecker"   target="_blank" rel="noopener noreferrer">Скачать</a>
+              <div class="developer">
+                Разработчик: <strong>ZerioCommand</strong> | © 2025 Все права защищены.
+              </div>
+            </div>
+          </div>
+          <div class="slide">
+            <div class="slide-inner">
+              <div class="slide-content">
+                <h2 style="color: #FF47CA; font-size: 2rem;">💻 Информация о системе</h2>
+                <p>Данные о видеокарте, объеме RAM, количестве мониторов и установленных приложениях.</p>
+              </div>
+              <a class="button-download" href="https://github.com/ZerioCommand/LuxeChecker"   target="_blank" rel="noopener noreferrer">Скачать</a>
+              <div class="developer">
+                Разработчик: <strong>ZerioCommand</strong> | © 2025 Все права защищены.
+              </div>
+            </div>
+          </div>
+          <!-- Слайд 5 -->
+          <div class="slide">
+            <div class="slide-inner">
+              <div class="slide-content">
+                <h2 style="color: #FF47CA; font-size: 2rem;">⚙︎ Дополнительные возможности</h2>
+                <pre><code>
+- Поддержка языков: Русский / Английский
+- Автоматическое обновление
+- Редактор реестра
+- История запущенных процессов
+- Список доп. программ для проверки
+                </code></pre>
+              </div>
+              <a class="button-download" href="https://github.com/ZerioCommand/LuxeChecker"   target="_blank" rel="noopener noreferrer">Скачать</a>
+              <div class="developer">
+                Разработчик: <strong>ZerioCommand</strong> | © 2025 Все права защищены.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  <section id="tools">
-    <h2 style="text-align:center; margin-bottom: 2rem;">⚙️ Дополнительные возможности</h2>
-    <pre><code>
- - Редактор реестра
- - История запущенных процессов
- - Список доп. программы для проверки
- - Поддержка языков: Русский / Английский(частично)
- - Автоматические обновления
-    </code></pre>
-  </section>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const overlay = document.querySelector('.overlay');
+      const title = document.querySelector('.left-panel h1');
+      const paragraph = document.querySelector('.left-panel p');
 
-  <section id="download">
-    <h2 style="text-align:center; margin-bottom: 2rem;">📥 Скачать</h2>
-    <p style="text-align:center;">
-      <a class="button" href="https://github.com/ZerioCommand/LuxeChecker " target="_blank" rel="noopener noreferrer">Скачать последнюю версию</a>
-    </p>
-  </section>
+      setTimeout(() => {
+        overlay.classList.add('active');
+        setTimeout(() => {
+          title.classList.add('active');
+          setTimeout(() => {
+            paragraph.classList.add('active');
+          }, 300);
+        }, 300);
+      }, 200);
 
-  <footer class="footer">
-    &copy; 2025 ZerioCommand. Все права защищены.
-  </footer>
+      const slides = document.querySelectorAll('.slide');
+      let currentIndex = 0;
 
+      function showSlide(index) {
+        slides.forEach((slide, i) => {
+          slide.classList.remove('active');
+          if (i === index) {
+            slide.classList.add('active');
+            setTimeout(() => {
+              slide.querySelector('.slide-inner')?.classList.add('active');
+            }, 200);
+          }
+        });
+      }
+
+      function nextSlide() {
+        let nextIndex = (currentIndex + 1) % slides.length;
+        showSlide(nextIndex);
+        currentIndex = nextIndex;
+      }
+
+      showSlide(currentIndex);
+      setInterval(nextSlide, 4000);
+    });
+  </script>
+
+  <script>
+    window.addEventListener("load", function () {
+      const preloader = document.getElementById('preloader');
+      const audio = document.getElementById('preloadAudio');
+
+      if (audio) {
+        audio.volume = 1.0;
+        audio.play().catch(e => console.log("Ошибка воспроизведения звука:", e));
+      }
+
+      setTimeout(function () {
+        preloader.style.transition = 'background-color 1s ease';
+        preloader.style.backgroundColor = '#fff';
+        preloader.querySelector('img').style.opacity = '0';
+
+        setTimeout(() => {
+          if (audio) {
+            let fadeOutInterval = setInterval(() => {
+              if (audio.volume > 0.01) {
+                audio.volume -= 0.05;
+              } else {
+                clearInterval(fadeOutInterval);
+                audio.pause();
+                audio.currentTime = 0;
+              }
+            }, 50);
+          }
+        }, 500); 
+        setTimeout(() => {
+          preloader.remove();
+
+          const overlay = document.querySelector('.overlay');
+          const title = document.querySelector('.left-panel h1');
+          const paragraph = document.querySelector('.left-panel p');
+
+          if (overlay) overlay.classList.add('active');
+          if (title) {
+            setTimeout(() => {
+              title.classList.add('active');
+              if (paragraph) {
+                setTimeout(() => {
+                  paragraph.classList.add('active');
+                }, 300);
+              }
+            }, 300);
+          }
+        }, 1200);
+      }, 3000); 
+    });
+  </script>
 </body>
 </html>
