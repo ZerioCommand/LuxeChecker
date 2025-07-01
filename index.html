@@ -31,7 +31,6 @@
       overflow: hidden;
       position: relative;
     }
-    /* Фоновое видео */
     .background-video {
       position: fixed;
       top: 0;
@@ -42,7 +41,6 @@
       z-index: -2;
       opacity: 0.3;
     }
-    /* Центральная обёртка */
     .app-container {
       position: absolute;
       top: 50%;
@@ -298,7 +296,6 @@
   transform: scale(1.1);
 }
 
-/* Медиа-запросы для мобильных устройств */
 @media (max-width: 768px) {
   .app-container {
     flex-direction: column;
@@ -365,7 +362,6 @@
   }
 }
 
-/* Адаптация для планшетов */
 @media (min-width: 769px) and (max-width: 1024px) {
   .app-container {
     max-height: 95vh;
@@ -389,7 +385,6 @@
   }
 }
 
-/* Стили для горизонтальной ориентации на мобильных */
 @media (max-height: 500px) and (orientation: landscape) {
   .app-container {
     flex-direction: row;
@@ -420,7 +415,6 @@
   }
 }
 
-/* Остальные стили остаются без изменений */
 .overlay {
   text-align: left;
   z-index: 1;
@@ -448,7 +442,6 @@ body {
   position: relative;
 }
 
-/* Адаптация фонового видео */
 .background-video {
   position: fixed;
   top: 0;
@@ -475,7 +468,6 @@ body {
   box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
 }
 
-/* Кнопка "О программе" */
 .button-info {
   padding: 0.6rem 1.2rem;
   background: #333;
@@ -492,10 +484,9 @@ body {
   color: #fff;
 }
 
-/* Добавьте этот стиль в ваш CSS */
 .button-info-container {
   position: absolute;
-  bottom: 60px; /* Расположение перед точками */
+  bottom: 60px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 10;
@@ -503,7 +494,6 @@ body {
   margin-bottom: 10px;
 }
 
-/* Модальное окно */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -569,29 +559,22 @@ body {
 </head>
 <body>
   <body style="-webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;" oncontextmenu="return false;"></body>
-  <!-- Прелоадер -->
   <div id="preloader" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; display: flex; align-items: center; justify-content: center; z-index: 9999;">
-    <img src="https://www.dropbox.com/scl/fi/c2co66ci9hrj528m19p41/admil-flashbang.gif?rlkey=4hegetj7qoa6wwmsh9xh1p9pe&st=ltjual2k&dl=1" alt="Загрузка..." style="width: auto; height: 200px;">
-    <!-- Аудио элемент -->
-    <audio id="preloadAudio" src="https://www.dropbox.com/scl/fi/ve9lu9gvjuqk8su1k3hmw/cs-go-flashbang.mp3?spm=a2ty_o01.29997173.0.0.3043c921iHUGe1&dl=1" autoplay></audio>
-  </div>
+  <img src=" https://www.dropbox.com/scl/fi/c2co66ci9hrj528m19p41/admil-flashbang.gif?rlkey=4hegetj7qoa6wwmsh9xh1p9pe&st=ltjual2k&dl=1" alt="Загрузка..." style="width: auto; height: 200px;">
+</div>
 
-  <!-- Общее фоновое видео -->
   <video class="background-video" autoplay loop muted playsinline>
     <source src="https://dl.dropboxusercontent.com/scl/fi/tmzbe9jdzp2nndb8hc6l6/videoplayback.webm?rlkey=2nf3pkzel2caqlikqriru994o&st=vxj3rxam" type="video/webm">
     Ваш браузер не поддерживает видео.
   </video>
   <div class="app-container">
     
-    <!-- Левая панель -->
     <div class="left-panel">
-  <!-- Основной контент -->
   <div class="overlay">
     <h1>LuxeChecker</h1>
     <p>Мощное приложение для проверки на читы, запуска утилит и поиск по файлам</p>
   </div>
 
-  <!-- Логотипы -->
   <div class="logos-container">
     <a href="https://vk.com/f_r_o_z_k_a"  target="_blank" class="logo-top">
       <img src="https://i.postimg.cc/q7WL0gcr/VK-Text-Logo-Black-white.png" alt="Верхний логотип">
@@ -601,7 +584,6 @@ body {
     </a>
   </div>
 </div>
-    <!-- Правая панель -->
     <div class="right-panel">
       <div class="slider-container">
         <div class="slides" id="slides">
@@ -686,7 +668,6 @@ body {
 </div>
 
 <div class="slider-dots" id="sliderDots"></div>
-<!-- Модальное окно -->
 <div id="infoModal" class="modal-overlay">
   <div class="modal-window">
     <span class="modal-close">&times;</span>
@@ -743,7 +724,6 @@ body {
       }
     });
 
-    // Обновляем активную точку
     dots.forEach((dot, i) => {
       dot.classList.toggle('active', i === index);
     });
@@ -762,58 +742,30 @@ body {
 
   <script>
     window.addEventListener("load", function () {
-      const preloader = document.getElementById('preloader');
-      const audio = document.getElementById('preloadAudio');
-
-      // Начинаем воспроизведение звука
-      if (audio) {
-        audio.volume = 1.0;
-        audio.play().catch(e => console.log("Ошибка воспроизведения звука:", e));
-      }
-
-      setTimeout(function () {
-        // Плавное затемнение гифки и изменение фона
-        preloader.style.transition = 'background-color 1s ease';
-        preloader.style.backgroundColor = '#fff';
-        preloader.querySelector('img').style.opacity = '0';
-
-        // Через 1 секунду начинаем уменьшение громкости
+  const preloader = document.getElementById('preloader');
+  setTimeout(function () {
+    preloader.style.transition = 'background-color 1s ease';
+    preloader.style.backgroundColor = '#fff';
+    preloader.querySelector('img').style.opacity = '0';
+    setTimeout(() => {
+      preloader.remove();
+      const overlay = document.querySelector('.overlay');
+      const title = document.querySelector('.left-panel h1');
+      const paragraph = document.querySelector('.left-panel p');
+      if (overlay) overlay.classList.add('active');
+      if (title) {
         setTimeout(() => {
-          if (audio) {
-            let fadeOutInterval = setInterval(() => {
-              if (audio.volume > 0.01) {
-                audio.volume -= 0.05;
-              } else {
-                clearInterval(fadeOutInterval);
-                audio.pause();
-                audio.currentTime = 0;
-              }
-            }, 50);
-          }
-        }, 500);
-
-        setTimeout(() => {
-          preloader.remove();
-
-          // Перезапуск анимаций (повторная активация)
-          const overlay = document.querySelector('.overlay');
-          const title = document.querySelector('.left-panel h1');
-          const paragraph = document.querySelector('.left-panel p');
-
-          if (overlay) overlay.classList.add('active');
-          if (title) {
+          title.classList.add('active');
+          if (paragraph) {
             setTimeout(() => {
-              title.classList.add('active');
-              if (paragraph) {
-                setTimeout(() => {
-                  paragraph.classList.add('active');
-                }, 300);
-              }
+              paragraph.classList.add('active');
             }, 300);
           }
-        }, 1200);
-      }, 3000);
-    });
+        }, 300);
+      }
+    }, 1200);
+  }, 3000);
+});
   </script>
 
   <script>
@@ -830,7 +782,6 @@ body {
       modal.classList.remove('active');
     });
 
-    // Закрытие по клику вне окна
     modal.addEventListener('click', (e) => {
       if (e.target === modal) {
         modal.classList.remove('active');
