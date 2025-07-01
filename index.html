@@ -474,6 +474,97 @@ body {
   overflow: hidden;
   box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
 }
+
+/* Кнопка "О программе" */
+.button-info {
+  padding: 0.6rem 1.2rem;
+  background: #333;
+  color: #FF47CA;
+  border: 1px solid #FF47CA;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+.button-info:hover {
+  background: #222;
+  color: #fff;
+}
+
+/* Добавьте этот стиль в ваш CSS */
+.button-info-container {
+  position: absolute;
+  bottom: 60px; /* Расположение перед точками */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+/* Модальное окно */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s ease;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-window {
+  background: #1a1a1a;
+  padding: 2rem;
+  border-radius: 12px;
+  max-width: 500px;
+  width: 90%;
+  position: relative;
+  animation: modalFadeIn 0.4s ease forwards;
+}
+
+@keyframes modalFadeIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 1.5rem;
+  color: #aaa;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.modal-close:hover {
+  color: #fff;
+}
+
+.modal-window ul {
+  list-style: disc inside;
+  margin-left: 1rem;
+  margin-bottom: 1rem;
+}
   </style>
 </head>
 <body>
@@ -490,9 +581,8 @@ body {
     <source src="https://dl.dropboxusercontent.com/scl/fi/tmzbe9jdzp2nndb8hc6l6/videoplayback.webm?rlkey=2nf3pkzel2caqlikqriru994o&st=vxj3rxam" type="video/webm">
     Ваш браузер не поддерживает видео.
   </video>
-
-  <!-- Центральная обёртка -->
   <div class="app-container">
+    
     <!-- Левая панель -->
     <div class="left-panel">
   <!-- Основной контент -->
@@ -590,9 +680,27 @@ body {
       </div>
     </div>
   </div>
-<div class="slider-dots" id="sliderDots"></div>
-  </div>
+
+<div class="button-info-container">
+  <button id="openInfoModal" class="button-info">О программе</button>
 </div>
+
+<div class="slider-dots" id="sliderDots"></div>
+<!-- Модальное окно -->
+<div id="infoModal" class="modal-overlay">
+  <div class="modal-window">
+    <span class="modal-close">&times;</span>
+    <h2 style="color: #FF47CA; margin-top: 0;">О программе LuxeChecker</h2>
+    <p>LuxeChecker — это мощное приложение для анализа системы, проверки на наличие читов, запуска утилит и управления файлами.</p>
+    <ul>
+      <li>✔ Проверка на читы</li>
+      <li>✔ CS 1.6,CS:Source СS Global Ofensive,CS2</li>
+      <li>✔ Для серверов сообщества</li>
+      <li>✔ Вы можете проверить программу на Virus Total или Kaspersky</li>
+      <li>✔ Обязательно скачивайте только с этого офицального сайта</li>
+    </ul>
+    <p>Разработчик: <strong>ZerioCommand</strong></p>
+  </div>
 
   <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -609,11 +717,9 @@ body {
     }, 300);
   }, 200);
 
-  // Слайдер
   const slides = document.querySelectorAll('.slide');
   let currentIndex = 0;
 
-  // Создаем точечки
   const dotsContainer = document.getElementById('sliderDots');
 
   slides.forEach((_, i) => {
@@ -709,5 +815,28 @@ body {
       }, 3000);
     });
   </script>
+
+  <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const modal = document.getElementById('infoModal');
+    const btn = document.getElementById('openInfoModal');
+    const closeBtn = document.querySelector('.modal-close');
+
+    btn.addEventListener('click', () => {
+      modal.classList.add('active');
+    });
+
+    closeBtn.addEventListener('click', () => {
+      modal.classList.remove('active');
+    });
+
+    // Закрытие по клику вне окна
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.classList.remove('active');
+      }
+    });
+  });
+</script>
 </body>
 </html>
