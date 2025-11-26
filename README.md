@@ -17,7 +17,7 @@
   * `USBDeview`
   * `Everything`
   
-  ![2](https://i.postimg.cc/3rjqy2XT/image.png)
+  ![2](https://i.postimg.cc/X7Cpc7vq/155261BE_0B7D_4C56_9997_CEAEC4954174.png)
 
 ### 📁 Работа с папками
 
