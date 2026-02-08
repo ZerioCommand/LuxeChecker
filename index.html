@@ -6,19 +6,35 @@
   <title>LuxeChecker</title>
   <meta name="description" content="LuxeChecker — приложение для проверки читов, запуска утилит и многое другое.">
   <meta name="keywords" content="анализ системы, утилиты, читы, CSGO, CS2, анализ безопасности">
+   
   <meta property="og:title" content="LuxeChecker">
   <meta property="og:description" content="Мощное приложение для проверки читов, запуска утилит и многое другое">
   <meta property="og:type" content="website">
   <meta name="twitter:title" content="LuxeChecker">
   <meta name="twitter:description" content="Мощное приложение для проверки читов, запуска утилит и многое другое">
+   
   <link rel="icon" href="https://www.dropbox.com/scl/fi/6ytzpk5uxn1cev63xjk1h/Luxe.png?rlkey=uovqt90cxixgk2y3ong1kmcm6&st=faap4w6t&dl=1" type="image/x-icon">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+   
   <style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
+
+    .app-container {
+      background: rgba(20, 20, 20, 0.6);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .left-panel {
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
+      background: transparent;
+    }
+     
     body {
       font-family: 'Inter', sans-serif;
       background-color: #0f0f0f;      
@@ -28,9 +44,10 @@
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      overflow: hidden;
+      overflow-x: hidden;
       position: relative;
     }
+
     .background-video {
       position: fixed;
       top: 0;
@@ -41,6 +58,27 @@
       z-index: -2;
       opacity: 0.3;
     }
+
+    /* Прелоадер */
+    .preloader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      transition: background-color 0.8s ease, opacity 0.8s ease;
+    }
+    .preloader img {
+      width: auto;
+      height: 200px;
+      transition: opacity 0.5s ease;
+    }
+
     .app-container {
       position: absolute;
       top: 50%;
@@ -55,31 +93,35 @@
       overflow: hidden;
       box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
     }
+
+    .left-panel {
+      width: 50%;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border-right: 1px solid #333;
+      padding: 2rem;
+    }
+
     .overlay {
-  text-align: left;
-  z-index: 1;
-  width: 80%;
-  opacity: 0;
-  max-width: 500px;
-  transform: translateY(30px);
-  transition: all 1s ease-out;
-  width: 100%;
-  margin: 0 auto;
-  padding-left: 2rem;
-  margin-top: auto;
-}
+      text-align: left;
+      z-index: 1;
+      width: 100%;
+      max-width: 500px;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 1s ease-out;
+      margin-bottom: 2rem;
+    }
     .overlay.active {
       opacity: 1;
       transform: translateY(0);
     }
+
     .left-panel h1 {
       font-size: 4rem;
-      background-image: linear-gradient(90deg,
-        #FF69B4,
-        #FF1493,
-        #FF6EB4,
-        #FFB6C1,
-        #FF69B4);
+      background-image: linear-gradient(90deg, #FF69B4, #FF1493, #FF6EB4, #FFB6C1, #FF69B4);
       background-size: 200% auto;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -93,11 +135,7 @@
       opacity: 1;
       transform: scale(1);
     }
-    @keyframes pinkShine {
-      0% { background-position: 0% center; }
-      50% { background-position: 100% center; }
-      100% { background-position: 0% center; }
-    }
+
     .left-panel p {
       font-size: 1.25rem;
       color: #ccc;
@@ -109,12 +147,55 @@
       opacity: 1;
       transform: translateY(0);
     }
+
+    .logos-container {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+      width: 100%;
+      padding-bottom: 3rem;
+    }
+    .logo-link {
+      display: block;
+      transition: transform 0.3s ease;
+    }
+    .logo-link img {
+      width: 200px;
+      height: auto;
+      object-fit: contain;
+      border: none;
+    }
+    .logo-link:hover {
+      transform: scale(1.05);
+    }
+
+    .button-info {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      padding: 0.5rem 0;
+      background: transparent;
+      color: #666;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+      z-index: 10;
+    }
+    .button-info:hover {
+      color: #fff;
+      text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+    }
+
     .right-panel {
       width: 50%;
       display: flex;
       flex-direction: column;
       position: relative;
     }
+
     .slider-container {
       flex-grow: 1;
       position: relative;
@@ -141,6 +222,7 @@
       opacity: 1;
       pointer-events: auto;
     }
+
     .slide-inner {
       display: flex;
       flex-direction: column;
@@ -158,16 +240,23 @@
       opacity: 1;
       transform: translateY(0);
     }
+
     .slide-content {
       max-width: 95%;
       font-size: 1.4rem;
       color: #fff;
     }
+    .slide-content h2 {
+      color: #FF47CA;
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
     pre {
       background: transparent;
       border: none;
       color: #FF47CA;
-      font-size: 1.3rem;
+      font-size: 1.1rem;
       white-space: pre-wrap;
       word-wrap: break-word;
       text-align: left;
@@ -177,6 +266,7 @@
       color: #FF47CA;
       font-family: monospace;
     }
+
     .button-download {
       margin-top: 2rem;
       padding: 0.8rem 1.5rem;
@@ -200,22 +290,34 @@
       left: -50%;
       width: 200%;
       height: 200%;
-      background: linear-gradient(
-        120deg,
-        rgba(255, 255, 255, 0.0) 0%,
-        rgba(255, 255, 255, 0.3) 40%,
-        rgba(255, 255, 255, 0.0) 80%
-      );
+      background: linear-gradient(120deg, rgba(255, 255, 255, 0.0) 0%, rgba(255, 255, 255, 0.3) 40%, rgba(255, 255, 255, 0.0) 80%);
       transform: rotate(25deg);
       animation: shine 3s ease-in-out infinite;
       pointer-events: none;
       z-index: 2;
     }
-    @keyframes shine {
-      0% { left: -50%; }
-      50% { left: 100%; }
-      100% { left: 100%; }
+
+    .slider-dots {
+      position: absolute;
+      bottom: 20px;
+      left: 75%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 8px;
+      z-index: 10;
     }
+    .slider-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.4);
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .slider-dot.active {
+      background-color: #FF47CA;
+    }
+
     .developer {
       margin-top: 1.5rem;
       font-size: 0.9rem;
@@ -226,570 +328,386 @@
       color: #FF47CA;
     }
 
-    .slider-dots {
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 8px;
-  z-index: 10;
-}
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.4s ease;
+    }
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    .modal-window {
+      background: #1a1a1a;
+      padding: 2rem;
+      border-radius: 12px;
+      max-width: 500px;
+      width: 90%;
+      position: relative;
+      animation: modalFadeIn 0.4s ease forwards;
+    }
+    .modal-window h2 {
+      color: #FF47CA; 
+      margin-top: 0;
+      margin-bottom: 1rem;
+    }
+    .modal-window ul {
+      list-style: disc inside;
+      margin: 1rem 0;
+    }
+    .modal-close {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      font-size: 1.5rem;
+      color: #aaa;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+    .modal-close:hover {
+      color: #fff;
+    }
 
-.slider-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.4);
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
+    @keyframes pinkShine {
+      0% { background-position: 0% center; }
+      50% { background-position: 100% center; }
+      100% { background-position: 0% center; }
+    }
+    @keyframes shine {
+      0% { left: -50%; }
+      50% { left: 100%; }
+      100% { left: 100%; }
+    }
+    @keyframes modalFadeIn {
+      from { transform: scale(0.95); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
 
-.slider-dot.active {
-  background-color: #FF47CA;
-}
+    /* Адаптивность */
+    @media (max-width: 768px) {
+      .app-container {
+        flex-direction: column;
+        height: auto;
+        min-height: 90vh;
+        max-height: none;
+      }
+      .left-panel, .right-panel {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #333;
+        padding: 1rem;
+      }
+      .left-panel h1 { font-size: 2.5rem; text-align: center; }
+      .left-panel p { font-size: 1rem; text-align: center; }
+      .overlay { text-align: center; margin-top: 1rem; }
+      
+      .logos-container { 
+        align-items: center; 
+        flex-direction: row; 
+        justify-content: center; 
+        gap: 2rem; 
+        padding-bottom: 2.5rem;
+      }
+      .logo-link img { width: 120px; height: auto; }
+      
+      .button-info {
+         left: 50%;
+         transform: translateX(-50%);
+         bottom: 10px;
+         font-size: 0.8rem;
+      }
 
-.left-panel {
-  width: 50%;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-right: 1px solid #333;
-}
-.left-panel {
-  width: 50%;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  border-right: 1px solid #333;
-  padding: 2rem;
-}
+      .slide-content { font-size: 1.1rem; padding: 0.5rem; }
+      .slide-inner { padding: 0.5rem; }
+      .button-download { padding: 0.6rem 1rem; font-size: 0.9rem; }
+      pre code { font-size: 0.9rem; }
+      .developer { font-size: 0.8rem; }
+      
+      .slider-dots {
+          left: 50%;
+      }
+    }
 
-.logos-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  margin-top: auto;
-  width: 100%;
-  padding-bottom: 2rem;
-}
+    @media (min-width: 769px) and (max-width: 1024px) {
+      .app-container { max-height: 95vh; }
+      .left-panel h1 { font-size: 3rem; }
+      .left-panel p { font-size: 1.1rem; }
+      .logo-link img { width: 160px; height: auto; }
+      .slide-content { font-size: 1.2rem; }
+      .slider-dots { left: 75%; }
+    }
 
-.logo-top,
-.logo-bottom {
-  display: block;
-  transition: transform 0.3s ease;
-}
-
-.logo-top img,
-.logo-bottom img {
-  width: 300px;
-  height: 100px;
-  object-fit: contain;
-  border: none;
-}
-
-.logo-top:hover,
-.logo-bottom:hover {
-  transform: scale(1.1);
-}
-
-@media (max-width: 768px) {
-  .app-container {
-    flex-direction: column;
-    height: auto;
-    min-height: 90vh;
-    max-height: none;
-  }
-
-  .left-panel, .right-panel {
-    width: 100% !important;
-    border-right: none !important;
-    border-bottom: 1px solid #333;
-    padding: 1rem !important;
-  }
-
-  .left-panel h1 {
-    font-size: 2.5rem !important;
-    text-align: center;
-  }
-
-  .left-panel p {
-    font-size: 1rem !important;
-    text-align: center;
-  }
-
-  .overlay {
-    padding-left: 0 !important;
-    text-align: center !important;
-    margin-top: 1rem !important;
-  }
-
-  .logos-container {
-    flex-direction: row !important;
-    justify-content: center;
-    gap: 2rem !important;
-    padding-bottom: 1rem !important;
-  }
-
-  .logo-top img, .logo-bottom img {
-    width: 120px !important;
-    height: auto !important;
-  }
-
-  .slide-content {
-    font-size: 1.1rem !important;
-    padding: 0.5rem !important;
-  }
-
-  .slide-inner {
-    padding: 0.5rem !important;
-  }
-
-  .button-download {
-    padding: 0.6rem 1rem !important;
-    font-size: 0.9rem !important;
-  }
-
-  pre code {
-    font-size: 0.9rem !important;
-  }
-
-  .developer {
-    font-size: 0.8rem !important;
-  }
-}
-
-@media (min-width: 769px) and (max-width: 1024px) {
-  .app-container {
-    max-height: 95vh;
-  }
-
-  .left-panel h1 {
-    font-size: 3rem !important;
-  }
-
-  .left-panel p {
-    font-size: 1.1rem !important;
-  }
-
-  .logo-top img, .logo-bottom img {
-    width: 200px !important;
-    height: 80px !important;
-  }
-
-  .slide-content {
-    font-size: 1.2rem !important;
-  }
-}
-
-@media (max-height: 500px) and (orientation: landscape) {
-  .app-container {
-    flex-direction: row;
-    height: 95vh;
-    max-height: 95vh;
-  }
-
-  .left-panel, .right-panel {
-    height: 100%;
-  }
-
-  .left-panel h1 {
-    font-size: 2rem !important;
-  }
-
-  .left-panel p {
-    font-size: 0.9rem !important;
-  }
-
-  .logos-container {
-    flex-direction: row !important;
-    gap: 1rem !important;
-  }
-
-  .logo-top img, .logo-bottom img {
-    width: 150px !important;
-    height: 50px !important;
-  }
-}
-
-.overlay {
-  text-align: left;
-  z-index: 1;
-  width: 80%;
-  opacity: 0;
-  max-width: 500px;
-  transform: translateY(30px);
-  transition: all 1s ease-out;
-  width: 100%;
-  margin: 0 auto;
-  padding-left: 2rem;
-  margin-top: auto;
-}
-
-body {
-  font-family: 'Inter', sans-serif;
-  background-color: #0f0f0f;
-  color: #ffffff;
-  line-height: 1.6;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  overflow-x: hidden;
-  position: relative;
-}
-
-.background-video {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: -2;
-  opacity: 0.3;
-}
-
-.app-container {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
-  max-width: 1200px;
-  height: 100vh;
-  max-height: 800px;
-  display: flex;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
-}
-
-.button-info {
-  padding: 0.6rem 1.2rem;
-  background: #333;
-  color: #FF47CA;
-  border: 1px solid #FF47CA;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-}
-.button-info:hover {
-  background: #222;
-  color: #fff;
-}
-
-.button-info-container {
-  position: absolute;
-  bottom: 60px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 10;
-  text-align: center;
-  margin-bottom: 10px;
-}
-
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.85);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.4s ease;
-}
-
-.modal-overlay.active {
-  opacity: 1;
-  visibility: visible;
-}
-
-.modal-window {
-  background: #1a1a1a;
-  padding: 2rem;
-  border-radius: 12px;
-  max-width: 500px;
-  width: 90%;
-  position: relative;
-  animation: modalFadeIn 0.4s ease forwards;
-}
-
-@keyframes modalFadeIn {
-  from {
-    transform: scale(0.95);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-.modal-close {
-  position: absolute;
-  top: 10px;
-  right: 20px;
-  font-size: 1.5rem;
-  color: #aaa;
-  cursor: pointer;
-  transition: color 0.3s ease;
-}
-
-.modal-close:hover {
-  color: #fff;
-}
-
-.modal-window ul {
-  list-style: disc inside;
-  margin-left: 1rem;
-  margin-bottom: 1rem;
-}
+    @media (max-height: 500px) and (orientation: landscape) {
+      .app-container { flex-direction: row; height: 95vh; max-height: 95vh; }
+      .left-panel, .right-panel { height: 100%; }
+      .left-panel h1 { font-size: 2rem; }
+      .left-panel p { font-size: 0.9rem; }
+      .logos-container { flex-direction: row; gap: 1rem; }
+      .logo-link img { width: 120px; }
+      .button-info { bottom: 10px; left: 10px; }
+    }
   </style>
 </head>
 <body>
-  <body style="-webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;" oncontextmenu="return false;"></body>
-  <div id="preloader" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; display: flex; align-items: center; justify-content: center; z-index: 9999;">
-  <img src=" https://www.dropbox.com/scl/fi/c2co66ci9hrj528m19p41/admil-flashbang.gif?rlkey=4hegetj7qoa6wwmsh9xh1p9pe&st=ltjual2k&dl=1" alt="Загрузка..." style="width: auto; height: 200px;">
-</div>
+
+  <div id="preloader" class="preloader">
+    <img src="https://www.dropbox.com/scl/fi/c2co66ci9hrj528m19p41/admil-flashbang.gif?rlkey=4hegetj7qoa6wwmsh9xh1p9pe&st=ltjual2k&dl=1" alt="Загрузка...">
+  </div>
 
   <video class="background-video" autoplay loop muted playsinline>
     <source src="https://dl.dropboxusercontent.com/scl/fi/tmzbe9jdzp2nndb8hc6l6/videoplayback.webm?rlkey=2nf3pkzel2caqlikqriru994o&st=vxj3rxam" type="video/webm">
     Ваш браузер не поддерживает видео.
   </video>
-  <div class="app-container">
-    
-    <div class="left-panel">
-  <div class="overlay">
-    <h1>LuxeChecker</h1>
-    <p>Мощное приложение для проверки на читы, запуска утилит и поиск по файлам</p>
-  </div>
 
-  <div class="logos-container">
-    <a href="https://vk.com/f_r_o_z_k_a"  target="_blank" class="logo-top">
-      <img src="https://i.postimg.cc/q7WL0gcr/VK-Text-Logo-Black-white.png" alt="Верхний логотип">
-    </a>
-    <a href="https://discord.gg/Jy98UdbRvV" target="_blank" class="logo-bottom">
-      <img src="https://i.postimg.cc/KvQDj07J/Discord-Logo-Black.png" alt="Нижний логотип">
-    </a>
-  </div>
-</div>
-    <div class="right-panel">
+  <main class="app-container">
+     
+    <section class="left-panel">
+      <div class="overlay">
+        <h1>LuxeChecker</h1>
+        <p>Мощное приложение для проверки на читы, запуска утилит и поиска по файлам</p>
+      </div>
+
+      <div class="logos-container">
+        <a href="https://vk.com/f_r_o_z_k_a" target="_blank" rel="noopener noreferrer" class="logo-link">
+          <img src="https://i.postimg.cc/q7WL0gcr/VK-Text-Logo-Black-white.png" alt="VK Логотип">
+        </a>
+        <a href="https://discord.gg/Jy98UdbRvV" target="_blank" rel="noopener noreferrer" class="logo-link">
+          <img src="https://i.postimg.cc/KvQDj07J/Discord-Logo-Black.png" alt="Discord Логотип">
+        </a>
+      </div>
+
+      <button id="openInfoModal" class="button-info">О программе</button>
+    </section>
+
+    <section class="right-panel">
       <div class="slider-container">
         <div class="slides" id="slides">
-          <!-- Слайд 1 -->
-          <div class="slide">
+           
+          <article class="slide">
             <div class="slide-inner">
               <div class="slide-content">
-                <h2 style="color: #FF47CA; font-size: 2rem;">🧰 Утилиты</h2>      
+                <h2>
+  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#FF47CA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-bottom: 4px; margin-right: 8px;">
+    <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+  </svg>
+  Утилиты
+</h2>      
                 <p>Запуск таких утилит как LastActivityView, USBDeview, ShellbagAnalyzer и др.</p>
               </div>
-              <a class="button-download" href="https://github.com/ZerioCommand/LuxeChecker/raw/main/LuxeChecker_Setup.exe"  download>Скачать</a>
+              <a class="button-download" href="https://github.com/ZerioCommand/LuxeChecker/raw/main/LuxeChecker_Setup.exe" download>Скачать</a>
               <div class="developer">
                 Разработчик: <strong>ZerioCommand</strong> | © 2025 Все права защищены.
               </div>
             </div>
-          </div>
-          <!-- Слайд 2 -->
-          <div class="slide">
+          </article>
+
+          <article class="slide">
             <div class="slide-inner">
               <div class="slide-content">
-                <h2 style="color: #FF47CA; font-size: 2rem;">📂 Работа с папками</h2>
+                <h2>
+  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#FF47CA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-bottom: 4px; margin-right: 8px;">
+    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+  </svg>
+  Работа с папками
+</h2>
                 <p>Открытие директорий AppData, Temp, Prefetch и просмотр содержимого.</p>
               </div>
-              <a class="button-download" href="https://github.com/ZerioCommand/LuxeChecker/raw/main/LuxeChecker_Setup.exe"  download>Скачать</a>
+              <a class="button-download" href="https://github.com/ZerioCommand/LuxeChecker/raw/main/LuxeChecker_Setup.exe" download>Скачать</a>
               <div class="developer">
                 Разработчик: <strong>ZerioCommand</strong> | © 2025 Все права защищены.
               </div>
             </div>
-          </div>
-          <!-- Слайд 3 -->
-          <div class="slide">
+          </article>
+
+          <article class="slide">
             <div class="slide-inner">
               <div class="slide-content">
-                <h2 style="color: #FF47CA; font-size: 2rem;">🌎︎ Открытие сайтов</h2>
+                <h2>
+  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#FF47CA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-bottom: 4px; margin-right: 8px;">
+    <circle cx="12" cy="12" r="10"></circle>
+    <line x1="2" y1="12" x2="22" y2="12"></line>
+    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+  </svg>
+  Открытие сайтов
+</h2>
                 <p>Быстрый доступ к популярным ресурсам: CheatCSGO.ru, Nixware.cc, Onetap.com и другим.</p>
               </div>
-              <a class="button-download" href="https://github.com/ZerioCommand/LuxeChecker/raw/main/LuxeChecker_Setup.exe"  download>Скачать</a>
+              <a class="button-download" href="https://github.com/ZerioCommand/LuxeChecker/raw/main/LuxeChecker_Setup.exe" download>Скачать</a>
               <div class="developer">
                 Разработчик: <strong>ZerioCommand</strong> | © 2025 Все права защищены.
               </div>
             </div>
-          </div>
-          <!-- Слайд 4 -->
-          <div class="slide">
+          </article>
+
+          <article class="slide">
             <div class="slide-inner">
               <div class="slide-content">
-                <h2 style="color: #FF47CA; font-size: 2rem;">💻 Информация о системе</h2>
+                <h2>
+  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#FF47CA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-bottom: 4px; margin-right: 8px;">
+    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+    <line x1="8" y1="21" x2="16" y2="21"></line>
+    <line x1="12" y1="17" x2="12" y2="21"></line>
+  </svg>
+  Информация о системе
+</h2>
                 <p>Данные о видеокарте, объеме RAM, количестве мониторов и установленных приложениях.</p>
               </div>
-              <a class="button-download" href="https://github.com/ZerioCommand/LuxeChecker/raw/main/LuxeChecker_Setup.exe"  download>Скачать</a>
+              <a class="button-download" href="https://github.com/ZerioCommand/LuxeChecker/raw/main/LuxeChecker_Setup.exe" download>Скачать</a>
               <div class="developer">
                 Разработчик: <strong>ZerioCommand</strong> | © 2025 Все права защищены.
               </div>
             </div>
-          </div>
-          <!-- Слайд 5 -->
-          <div class="slide">
+          </article>
+
+          <article class="slide">
             <div class="slide-inner">
               <div class="slide-content">
-                <h2 style="color: #FF47CA; font-size: 2rem;">⚙︎ Дополнительные возможности</h2>
-                <pre><code>
-- Поддержка языков: Русский / Английский
+                <h2>
+  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#FF47CA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-bottom: 4px; margin-right: 8px;">
+    <circle cx="12" cy="12" r="3"></circle>
+    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+  </svg>
+  Дополнительные возможности
+</h2>
+                <pre><code>- Поддержка языков: Русский / Английский
 - Автоматическое обновление
 - Редактор реестра
 - История запущенных процессов
-- Список доп. программ для проверки
-                </code></pre>
+- Список доп. программ для проверки</code></pre>
               </div>
-              <a class="button-download" href="https://github.com/ZerioCommand/LuxeChecker/raw/main/LuxeChecker.exe"  download>Скачать</a>
+              <a class="button-download" href="https://github.com/ZerioCommand/LuxeChecker/raw/main/LuxeChecker.exe" download>Скачать</a>
               <div class="developer">
                 Разработчик: <strong>ZerioCommand</strong> | © 2025 Все права защищены.
               </div>
             </div>
-          </div>
+          </article>
+
         </div>
       </div>
+    </section>
+  </main>
+
+  <div class="slider-dots" id="sliderDots"></div>
+
+  <div id="infoModal" class="modal-overlay">
+    <div class="modal-window">
+      <span class="modal-close">&times;</span>
+      <h2>О программе LuxeChecker</h2>
+      <p>LuxeChecker — это мощное приложение для анализа системы, проверки на наличие читов, запуска утилит и управления файлами.</p>
+      <ul>
+        <li>✔ Проверка на читы</li>
+        <li>✔ Поддержка CS 1.6, CS:Source, CS:GO, CS2</li>
+        <li>✔ Для серверов сообщества</li>
+        <li>✔ Проверено на VirusTotal и Kaspersky</li>
+        <li>✔ Скачивайте только с этого официального сайта</li>
+      </ul>
+      <p>Разработчик: <strong>ZerioCommand</strong></p>
     </div>
-  </div>
-
-<div class="button-info-container">
-  <button id="openInfoModal" class="button-info">О программе</button>
-</div>
-
-<div class="slider-dots" id="sliderDots"></div>
-<div id="infoModal" class="modal-overlay">
-  <div class="modal-window">
-    <span class="modal-close">&times;</span>
-    <h2 style="color: #FF47CA; margin-top: 0;">О программе LuxeChecker</h2>
-    <p>LuxeChecker — это мощное приложение для анализа системы, проверки на наличие читов, запуска утилит и управления файлами.</p>
-    <ul>
-      <li>✔ Проверка на читы</li>
-      <li>✔ CS 1.6,CS:Source СS Global Ofensive,CS2</li>
-      <li>✔ Для серверов сообщества</li>
-      <li>✔ Вы можете проверить программу на Virus Total или Kaspersky</li>
-      <li>✔ Обязательно скачивайте только с этого офицального сайта</li>
-    </ul>
-    <p>Разработчик: <strong>ZerioCommand</strong></p>
   </div>
 
   <script>
     document.addEventListener("DOMContentLoaded", function () {
-  const overlay = document.querySelector('.overlay');
-  const title = document.querySelector('.left-panel h1');
-  const paragraph = document.querySelector('.left-panel p');
-  setTimeout(() => {
-    overlay.classList.add('active');
-    setTimeout(() => {
-      title.classList.add('active');
-      setTimeout(() => {
-        paragraph.classList.add('active');
-      }, 300);
-    }, 300);
-  }, 200);
+       
+      const triggerStartAnimations = () => {
+        const overlay = document.querySelector('.overlay');
+        const title = document.querySelector('.left-panel h1');
+        const paragraph = document.querySelector('.left-panel p');
+         
+        if (overlay) overlay.classList.add('active');
+        if (title) {
+          setTimeout(() => {
+            title.classList.add('active');
+            if (paragraph) {
+              setTimeout(() => paragraph.classList.add('active'), 300);
+            }
+          }, 300);
+        }
+      };
 
-  const slides = document.querySelectorAll('.slide');
-  let currentIndex = 0;
-
-  const dotsContainer = document.getElementById('sliderDots');
-
-  slides.forEach((_, i) => {
-    const dot = document.createElement('div');
-    dot.classList.add('slider-dot');
-    if (i === currentIndex) dot.classList.add('active');
-    dot.addEventListener('click', () => showSlide(i));
-    dotsContainer.appendChild(dot);
-  });
-
-  const dots = document.querySelectorAll('.slider-dot');
-
-  function showSlide(index) {
-    slides.forEach((slide, i) => {
-      slide.classList.remove('active');
-      if (i === index) {
-        slide.classList.add('active');
+      const preloader = document.getElementById('preloader');
+      window.addEventListener('load', () => {
         setTimeout(() => {
-          slide.querySelector('.slide-inner')?.classList.add('active');
-        }, 200);
-      }
-    });
+          preloader.style.backgroundColor = 'transparent';
+          const img = preloader.querySelector('img');
+          if(img) img.style.opacity = '0';
+           
+          setTimeout(() => {
+            preloader.style.display = 'none';
+            triggerStartAnimations();
+          }, 800);
+        }, 500);
+      });
 
-    dots.forEach((dot, i) => {
-      dot.classList.toggle('active', i === index);
-    });
-  }
+      const slides = document.querySelectorAll('.slide');
+      const dotsContainer = document.getElementById('sliderDots');
+      let currentIndex = 0;
+      let slideInterval;
 
-  function nextSlide() {
-    let nextIndex = (currentIndex + 1) % slides.length;
-    showSlide(nextIndex);
-    currentIndex = nextIndex;
-  }
+      slides.forEach((_, i) => {
+        const dot = document.createElement('div');
+        dot.classList.add('slider-dot');
+        if (i === currentIndex) dot.classList.add('active');
+         
+        dot.addEventListener('click', () => {
+          showSlide(i);
+          resetInterval();
+        });
+        dotsContainer.appendChild(dot);
+      });
 
-  showSlide(currentIndex);
-  setInterval(nextSlide, 4000);
-});
-  </script>
+      const dots = document.querySelectorAll('.slider-dot');
 
-  <script>
-    window.addEventListener("load", function () {
-  const preloader = document.getElementById('preloader');
-  setTimeout(function () {
-    preloader.style.transition = 'background-color 1s ease';
-    preloader.style.backgroundColor = '#fff';
-    preloader.querySelector('img').style.opacity = '0';
-    setTimeout(() => {
-      preloader.remove();
-      const overlay = document.querySelector('.overlay');
-      const title = document.querySelector('.left-panel h1');
-      const paragraph = document.querySelector('.left-panel p');
-      if (overlay) overlay.classList.add('active');
-      if (title) {
-        setTimeout(() => {
-          title.classList.add('active');
-          if (paragraph) {
+      function showSlide(index) {
+        slides.forEach((slide, i) => {
+          slide.classList.remove('active');
+          if (i === index) {
+            slide.classList.add('active');
             setTimeout(() => {
-              paragraph.classList.add('active');
-            }, 300);
+              slide.querySelector('.slide-inner')?.classList.add('active');
+            }, 200);
           }
-        }, 300);
+        });
+
+        dots.forEach((dot, i) => {
+          dot.classList.toggle('active', i === index);
+        });
+         
+        currentIndex = index;
       }
-    }, 1200);
-  }, 3000);
-});
+
+      function nextSlide() {
+        let nextIndex = (currentIndex + 1) % slides.length;
+        showSlide(nextIndex);
+      }
+
+      function resetInterval() {
+        clearInterval(slideInterval);
+        slideInterval = setInterval(nextSlide, 5000);
+      }
+
+      showSlide(currentIndex);
+      slideInterval = setInterval(nextSlide, 5000);
+
+      const modal = document.getElementById('infoModal');
+      const btn = document.getElementById('openInfoModal');
+      const closeBtn = document.querySelector('.modal-close');
+
+      btn.addEventListener('click', () => modal.classList.add('active'));
+      closeBtn.addEventListener('click', () => modal.classList.remove('active'));
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) modal.classList.remove('active');
+      });
+    });
   </script>
-
-  <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const modal = document.getElementById('infoModal');
-    const btn = document.getElementById('openInfoModal');
-    const closeBtn = document.querySelector('.modal-close');
-
-    btn.addEventListener('click', () => {
-      modal.classList.add('active');
-    });
-
-    closeBtn.addEventListener('click', () => {
-      modal.classList.remove('active');
-    });
-
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) {
-        modal.classList.remove('active');
-      }
-    });
-  });
-</script>
 </body>
 </html>
-
-
